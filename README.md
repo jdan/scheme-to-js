@@ -16,7 +16,7 @@ tiny and easy to install. I typically [build it without X11](https://github.com/
 ### Example
 
 ```
-$ cat main.scm
+$ cat example.scm
 (load "compiler.scm")
 
 (display
@@ -33,7 +33,7 @@ $ cat main.scm
                     ""
                     (helper (cdr strs) (car strs))))
             (println (string-join (Array "apples" "bananas" "cucumbers") ",")))))
-$ scheme --script main.scm | prettier --parser babylon
+$ scheme --script example.scm | prettier --parser babylon
 (() => {
   function string$join(strs, joiner) {
     return (() => {
@@ -47,7 +47,6 @@ $ scheme --script main.scm | prettier --parser babylon
   }
   return console.log(string$join(Array("apples", "bananas", "cucumbers"), ","));
 })();
-$ scheme --script main.scm  | prettier --parser babylon | node
+$ scheme --script example.scm  | prettier --parser babylon | node
 apples,bananas,cucumbers
 ```
-
