@@ -1,11 +1,3 @@
-; TODO
-; - car, cdr, null?
-
-(define-syntax scheme->js
-    (syntax-rules ()
-        [(_ expr)
-         (scheme->js* (quote expr))]))
-
 (define (scheme->js* expr)
     (cond [(tagged-expr? 'if expr)
            (if-expr->js expr)]
@@ -37,6 +29,12 @@
 
           [else
            (error "Undefined expression type:" expr)]))
+
+; A quick macro so we don't need to quote the body
+(define-syntax scheme->js
+    (syntax-rules ()
+        [(_ expr)
+         (scheme->js* (quote expr))]))
 
 (define (tagged-expr? tag expr)
     (and (pair? expr)
