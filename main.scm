@@ -1,4 +1,3 @@
-#! /usr/bin/env scheme --script
 (load "compiler.scm")
 
 (display
@@ -6,7 +5,11 @@
         (begin
             ; These should be built in...
             (define (null? ls) (= 0 ls.length))
+            (define (car ls) (Array.prototype.shift.call ls (Array.prototype.slice.call ls)))
             (define (cdr ls) (Array.prototype.slice.call ls 1))
+            ; string-append is really just `+`, but our `+` is a binary operator
+            (define (string-append a b c)
+                (+ a (+ b c)))
 
             (define (string-join strs joiner)
                 (define (helper strs acc)
