@@ -1,20 +1,21 @@
 (define (scheme->js* expr)
-    (cond [(tagged-expr? 'if expr)
-           (if-expr->js expr)]
-          [(tagged-expr? 'lambda expr)
-           (lambda-expr->js expr)]
-          [(tagged-expr? 'define expr)
-           (define-expr->js expr)]
-          [(tagged-expr? 'begin expr)
-           (begin-expr->js expr)]
-          [(tagged-expr? 'println expr)
-           (println-expr->js expr)]
+    (cond [(tagged-expr? 'if expr) (if-expr->js expr)]
+          [(tagged-expr? 'lambda expr) (lambda-expr->js expr)]
+          [(tagged-expr? 'define expr) (define-expr->js expr)]
+          [(tagged-expr? 'begin expr) (begin-expr->js expr)]
+          [(tagged-expr? 'println expr) (println-expr->js expr)]
 
           [(tagged-expr? '= expr) (js-infix "===" expr)]
           [(tagged-expr? '+ expr) (js-infix "+" expr)]
           [(tagged-expr? '- expr) (js-infix "-" expr)]
           [(tagged-expr? '* expr) (js-infix "*" expr)]
           [(tagged-expr? '/ expr) (js-infix "/" expr)]
+
+          ; Some array methods
+          [(tagged-expr? 'null? expr) (null?-expr->js expr)]
+          [(tagged-expr? 'get expr) (get-expr->js expr)]
+          [(tagged-expr? 'car expr) (car-expr->js expr)]
+          [(tagged-expr? 'cdr expr) (cdr-expr->js expr)]
 
           [(pair? expr)
            (cond [(null? expr) "[]"]
@@ -92,6 +93,22 @@
 
 (define (println-expr->js expr)
     (scheme->js* (cons 'console.log (cdr expr))))
+
+(define (null?-expr->js expr)
+    (let [(ls (scheme->js* (cadr expr)))]
+        (string-append "(0 === (" ls ").length)")))
+
+(define (get-expr->js expr)
+    (let [(ls (scheme->js* (cadr expr)))
+          (idx (scheme->js* (caddr expr)))]
+        (string-append "(" ls ")[" idx "]")))
+
+(define (car-expr->js expr)
+    (get-expr->js `(get ,(cadr expr) 0)))
+
+(define (cdr-expr->js expr)
+    (let [(ls (scheme->js* (cadr expr)))]
+        (string-append "(" ls ").slice(1)")))
 
 (define (map-expr? expr)
     (and (pair? expr)
