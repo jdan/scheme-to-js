@@ -52,3 +52,39 @@ describe("big block of code from main", () => {
     )
   })
 })
+
+describe("arrays", () => {
+  it("should be able to car lists", done => {
+    compile("(car (Array 1 2 3))", output => {
+      expect(output).toMatchSnapshot()
+      expect(eval(output)).toMatchSnapshot()
+      done()
+    })
+  })
+
+  it("should be able to cdr lists", done => {
+    compile("(cdr (Array 1 2 3))", output => {
+      expect(output).toMatchSnapshot()
+      expect(eval(output)).toMatchSnapshot()
+      done()
+    })
+  })
+
+  it("should be able to recurse until an empty list", done => {
+    compile(
+      `
+      (begin
+        (define (sum ns)
+          (if (null? ns)
+              0
+              (+ (car ns) (sum (cdr ns)))))
+        (sum (Array 1 3 5 7 9))))
+    `,
+      output => {
+        expect(output).toMatchSnapshot()
+        expect(eval(output)).toMatchSnapshot()
+        done()
+      }
+    )
+  })
+})

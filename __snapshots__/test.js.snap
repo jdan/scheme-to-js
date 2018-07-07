@@ -5,6 +5,37 @@ exports[`+ should work 1`] = `
 "
 `;
 
+exports[`arrays should be able to car lists 1`] = `
+"Array(1, 2, 3)[0];
+"
+`;
+
+exports[`arrays should be able to car lists 2`] = `1`;
+
+exports[`arrays should be able to cdr lists 1`] = `
+"Array(1, 2, 3).slice(1);
+"
+`;
+
+exports[`arrays should be able to cdr lists 2`] = `
+Array [
+  2,
+  3,
+]
+`;
+
+exports[`arrays should be able to recurse until an empty list 1`] = `
+"(() => {
+  function sum(ns) {
+    return 0 === ns.length ? 0 : ns[0] + sum(ns.slice(1));
+  }
+  return sum(Array(1, 3, 5, 7, 9));
+})();
+"
+`;
+
+exports[`arrays should be able to recurse until an empty list 2`] = `25`;
+
 exports[`big block of code from main should match snapshots 1`] = `
 "(() => {
   function string$join(strs, joiner) {
