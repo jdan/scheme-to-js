@@ -65,7 +65,7 @@
            (body (scheme->js* (cons 'begin (cddr expr))))]
         (string-append
             "function " name "(" (string-join vars ",") ") {"
-            body
+            "return " body
             "}")))
 
 (define (begin-expr->js expr)
