@@ -16,7 +16,10 @@
           [(tagged-expr? '* expr) (js-infix "*" expr)]
           [(tagged-expr? '/ expr) (js-infix "/" expr)]
 
-          [(pair? expr) (apply-expr->js expr)]
+          [(pair? expr)
+           (cond [(null? expr) "[]"]
+                 [(map-expr? expr) (map-expr->js expr)]
+                 [else (apply-expr->js expr)])]
 
           [(boolean? expr)
            (if expr "true" "false")]
@@ -90,6 +93,29 @@
 (define (println-expr->js expr)
     (scheme->js* (cons 'console.log (cdr expr))))
 
+(define (map-expr? expr)
+    (and (pair? expr)
+         (> (length expr) 0)
+         (even? (length expr))
+         (eq? #\: (string-ref (symbol->string (car expr)) 0))))
+
+(define (map-expr->js expr)
+    (define (make-term key value)
+        (string-append "\"" (symbol->string* key) "\": "
+                       (scheme->js* value)
+                       ","))
+    (define (helper terms acc)
+        (if (null? terms)
+            acc
+            (helper (cddr terms)
+                    (cons (make-term (car terms) (cadr terms))
+                          acc))))
+    (string-join
+        (list "{"
+              (string-join (helper expr '()) "")
+              "}")
+        ""))
+
 (define (js-infix op expr)
     (string-append
         "("
@@ -122,4 +148,4 @@
                  (string->list str)))))
 
 (define (symbol->string* sym)
-    (string-replace (symbol->string sym) "->*?" "$"))
+    (string-replace (symbol->string sym) ":->*?" "$"))
