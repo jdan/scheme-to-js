@@ -43,8 +43,6 @@ $ cat main.scm
                     ""
                     (helper (cdr strs) (car strs))))
             (println (string-join (Array "apples" "bananas" "cucumbers") ",")))))
-$ scheme --script main.scm
-(() => {function null$(ls) {return (0===ls.length)};function car(ls) {return ((Array.prototype.shift.call)(ls,((Array.prototype.slice.call)(ls))))};function cdr(ls) {return ((Array.prototype.slice.call)(ls,1))};function string$append(a,b,c) {return (a+(b+c))};function string$join(strs,joiner) {return (() => {function helper(strs,acc) {return (((null$)(strs)))?(acc):(((helper)(((cdr)(strs)),((string$append)(acc,joiner,((car)(strs)))))))}return (((null$)(strs)))?(""):(((helper)(((cdr)(strs)),((car)(strs)))))})()}return ((console.log)(((string$join)(((Array)("apples","bananas","cucumbers")),","))))})()
 $ scheme --script main.scm  | prettier --parser babylon
 (() => {
   function null$(ls) {
